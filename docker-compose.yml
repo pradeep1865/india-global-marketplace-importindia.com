@@ -1,0 +1,29 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: importindia
+      POSTGRES_PASSWORD: importindia
+      POSTGRES_DB: importindia
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+
+  meilisearch:
+    image: getmeili/meilisearch:v1.8
+    environment:
+      MEILI_MASTER_KEY: importindia_master_key
+    ports:
+      - "7700:7700"
+    volumes:
+      - meili_data:/meili_data
+
+volumes:
+  postgres_data:
+  meili_data:

@@ -1,0 +1,18 @@
+{
+  "name": "importindia-marketplace",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Production-ready B2B/B2C global manufacturer marketplace platform for ImportIndia.com.",
+  "packageManager": "pnpm@10.11.0",
+  "scripts": {
+    "dev": "pnpm --parallel --filter @importindia/web --filter @importindia/api dev",
+    "build": "pnpm -r build",
+    "lint": "pnpm -r lint",
+    "typecheck": "pnpm -r typecheck",
+    "db:generate": "pnpm --filter @importindia/api prisma:generate",
+    "db:migrate": "pnpm --filter @importindia/api prisma:migrate"
+  },
+  "engines": {
+    "node": ">=20.18.0"
+  }
+}
