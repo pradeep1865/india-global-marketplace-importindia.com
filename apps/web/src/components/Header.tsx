@@ -7,6 +7,7 @@ import { LocationHydrator } from "@/components/LocationHydrator";
 import { LanguagePicker } from "@/components/LanguagePicker";
 import { CurrencyHydrator } from "@/components/CurrencyHydrator";
 import { CurrencyPicker } from "@/components/CurrencyPicker";
+import { ThemePicker } from "@/components/ThemePicker";
 import { AuthHydrator } from "@/components/AuthHydrator";
 import { useMarketplaceStore } from "@/store/marketplace-store";
 import { useAuthStore } from "@/store/auth-store";
@@ -17,7 +18,7 @@ export function Header() {
   const locationLabel = [location.city, location.country].filter(Boolean).join(", ");
 
   return (
-    <header className="sticky top-0 z-40 border-b border-slate-200 bg-white/90 backdrop-blur-xl">
+    <header className="sticky top-0 z-40 border-b border-white/45 bg-white/72 shadow-sm backdrop-blur-2xl">
       <LocationHydrator />
       <CurrencyHydrator />
       <AuthHydrator />
@@ -33,6 +34,7 @@ export function Header() {
         </div>
         <LanguagePicker />
         <CurrencyPicker />
+        <ThemePicker />
         <Link href="/cart" className="focus-ring rounded-full p-2 text-slate-600 hover:bg-slate-100" aria-label="Cart">
           <ShoppingCart size={20} />
         </Link>

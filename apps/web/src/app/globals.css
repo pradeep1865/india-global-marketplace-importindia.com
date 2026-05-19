@@ -6,6 +6,11 @@
   --deep-blue: #0b1f4d;
   --saffron: #ff9f1c;
   --line: #d9e2ef;
+  --theme-base: #f7f9fc;
+  --theme-pattern:
+    linear-gradient(120deg, rgba(255, 255, 255, 0.96), rgba(247, 249, 252, 0.92)),
+    linear-gradient(135deg, #f7f9fc 0%, #eef4fb 100%);
+  --theme-attachment: fixed;
 }
 
 * {
@@ -18,9 +23,54 @@ html {
 
 body {
   margin: 0;
-  background: var(--background);
+  min-height: 100vh;
+  background-color: var(--theme-base);
+  background-image: var(--theme-pattern);
+  background-attachment: var(--theme-attachment);
+  background-size: cover;
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+html[data-theme="white"] {
+  --theme-base: #f7f9fc;
+  --theme-pattern:
+    linear-gradient(120deg, rgba(255, 255, 255, 0.98), rgba(247, 249, 252, 0.94)),
+    linear-gradient(135deg, #ffffff 0%, #edf3fb 100%);
+}
+
+html[data-theme="trade"] {
+  --theme-base: #0b1f4d;
+  --theme-pattern:
+    linear-gradient(110deg, rgba(255, 255, 255, 0.90) 0%, rgba(239, 249, 255, 0.82) 44%, rgba(255, 245, 224, 0.82) 100%),
+    url("https://images.unsplash.com/photo-1494412685616-a5d310fbb07d?auto=format&fit=crop&w=1800&q=85");
+}
+
+html[data-theme="midnight"] {
+  --theme-base: #070b1f;
+  --theme-pattern:
+    linear-gradient(115deg, rgba(7, 11, 31, 0.88) 0%, rgba(11, 31, 77, 0.76) 42%, rgba(38, 198, 218, 0.34) 100%),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.10) 1px, transparent 1px),
+    linear-gradient(0deg, rgba(255, 255, 255, 0.08) 1px, transparent 1px),
+    url("https://images.unsplash.com/photo-1518005020951-eccb494ad742?auto=format&fit=crop&w=1800&q=85");
+}
+
+html[data-theme="midnight"] body {
+  background-size: cover, 52px 52px, 52px 52px, cover;
+}
+
+html[data-theme="saffron"] {
+  --theme-base: #fff4df;
+  --theme-pattern:
+    linear-gradient(118deg, rgba(255, 255, 255, 0.90) 0%, rgba(255, 244, 223, 0.80) 45%, rgba(234, 246, 255, 0.84) 100%),
+    url("https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1800&q=85");
+}
+
+html[data-theme="harbor"] {
+  --theme-base: #e8f7ff;
+  --theme-pattern:
+    linear-gradient(120deg, rgba(255, 255, 255, 0.90) 0%, rgba(232, 247, 255, 0.76) 48%, rgba(11, 31, 77, 0.24) 100%),
+    url("https://images.unsplash.com/photo-1578575437130-527eed3abbec?auto=format&fit=crop&w=1800&q=85");
 }
 
 button,

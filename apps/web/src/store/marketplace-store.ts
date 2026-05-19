@@ -3,6 +3,7 @@
 import { create } from "zustand";
 import { defaultCurrencyProfile, fallbackInrRates, getCurrencyProfile, type CurrencyProfile } from "@/lib/currency";
 import { defaultLanguageProfile, getLanguageProfile, type LanguageProfile } from "@/lib/locale";
+import { defaultThemeId, isThemeId, type ThemeId } from "@/lib/themes";
 
 export type GeoLocationState = {
   city: string;
@@ -33,6 +34,7 @@ type MarketplaceState = {
   currencyRatesSource: string;
   currencyRatesUpdatedAt: string;
   guestLoginPromptOpen: boolean;
+  themeId: ThemeId;
   selectedCategoryGroup: string;
   selectedSegment: string;
   sortBy: MarketplaceSort;
@@ -43,6 +45,8 @@ type MarketplaceState = {
   setLanguage: (languageCode: string) => void;
   setCurrency: (currencyCode: string) => void;
   setCurrencyRates: (payload: { rates: Record<string, number>; source: string; updatedAt: string }) => void;
+  hydrateTheme: () => void;
+  setTheme: (themeId: ThemeId) => void;
   setSelectedCategoryGroup: (category: string) => void;
   setSelectedSegment: (segment: string) => void;
   setSortBy: (sortBy: MarketplaceSort) => void;
@@ -74,6 +78,7 @@ const defaultFilters: MarketplaceFilters = {
 };
 
 const likesKey = (userId?: string) => `importindia.likes.${userId || "guest"}`;
+const themeKey = "importindia.theme";
 
 function readLikes(userId?: string) {
   if (typeof window === "undefined") return [];
@@ -93,6 +98,7 @@ export const useMarketplaceStore = create<MarketplaceState>((set) => ({
   currencyRatesSource: "fallback",
   currencyRatesUpdatedAt: "",
   guestLoginPromptOpen: false,
+  themeId: defaultThemeId,
   selectedCategoryGroup: "",
   selectedSegment: "",
   sortBy: "best-match",
@@ -111,6 +117,20 @@ export const useMarketplaceStore = create<MarketplaceState>((set) => ({
       currencyRatesSource: payload.source,
       currencyRatesUpdatedAt: payload.updatedAt
     }),
+  hydrateTheme: () => {
+    if (typeof window === "undefined") return;
+    const savedTheme = window.localStorage.getItem(themeKey);
+    const nextTheme = isThemeId(savedTheme) ? savedTheme : defaultThemeId;
+    document.documentElement.dataset.theme = nextTheme;
+    set({ themeId: nextTheme });
+  },
+  setTheme: (themeId) => {
+    if (typeof window !== "undefined") {
+      window.localStorage.setItem(themeKey, themeId);
+      document.documentElement.dataset.theme = themeId;
+    }
+    set({ themeId });
+  },
   setSelectedCategoryGroup: (category) => set({ selectedCategoryGroup: category, selectedSegment: "" }),
   setSelectedSegment: (segment) => set({ selectedSegment: segment }),
   setSortBy: (sortBy) => set({ sortBy }),
