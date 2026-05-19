@@ -7,6 +7,7 @@
   "scripts": {
     "dev": "pnpm --parallel --filter @importindia/web --filter @importindia/api dev",
     "build": "pnpm -r build",
+    "vercel-build": "pnpm --filter @importindia/web build",
     "lint": "pnpm -r lint",
     "typecheck": "pnpm -r typecheck",
     "db:generate": "pnpm --filter @importindia/api prisma:generate",

@@ -2,10 +2,13 @@ node_modules
 .next
 dist
 coverage
+.tools
 .env
 .env.*
 !.env.example
 *.log
+gh.zip
+tree-elements.json
 *.tsbuildinfo
 uploads
 tmp
