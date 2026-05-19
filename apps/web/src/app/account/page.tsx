@@ -32,6 +32,27 @@ export default function AccountPage() {
 
   const displayName = currentUser.fullName || currentUser.companyName || currentUser.email;
 
+  if (currentUser.role === "ADMIN") {
+    return (
+      <AppShell>
+        <section className="mx-auto max-w-3xl rounded-3xl border border-slate-200 bg-white p-8 text-center shadow-sm">
+          <div className="mx-auto grid h-16 w-16 place-items-center rounded-3xl bg-[#0b1f4d] text-white">
+            <ShieldCheck size={30} />
+          </div>
+          <p className="mt-5 text-sm font-black uppercase text-[#ff9f1c]">Admin account</p>
+          <h1 className="mt-2 text-4xl font-black text-[#0b1f4d]">{displayName}</h1>
+          <p className="mx-auto mt-3 max-w-xl leading-7 text-slate-600">
+            Use the admin profile to review manufacturer approvals, listing moderation, contact messages, and operational queues.
+          </p>
+          <div className="mt-6 flex flex-wrap justify-center gap-3">
+            <Link href="/admin/profile" className="focus-ring rounded-full bg-[#0b1f4d] px-5 py-3 text-sm font-black text-white">Open Admin Profile</Link>
+            <button onClick={logout} className="focus-ring rounded-full border border-red-200 px-5 py-3 text-sm font-black text-red-600">Logout</button>
+          </div>
+        </section>
+      </AppShell>
+    );
+  }
+
   return (
     <AppShell>
       <section className="mb-6 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">

@@ -39,12 +39,15 @@ export function LoginForm() {
 
     const result = login(email, password);
     setMessage(result.message);
-    if (result.ok) router.push("/account");
+    if (result.ok) router.push(result.account?.role === "ADMIN" ? "/admin/profile" : "/account");
   }
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
       <AuthMark />
+      <div className="rounded-2xl bg-blue-50 p-3 text-xs font-bold leading-6 text-[#0b1f4d]">
+        Admin demo login: admin@importindia.com / Admin@12345
+      </div>
       <OAuthButton provider="Google" href={`${apiUrl}/api/v1/auth/oauth/google`} />
       <OAuthButton provider="Facebook" href={`${apiUrl}/api/v1/auth/oauth/facebook`} />
       <label className="block text-sm font-bold text-slate-700">

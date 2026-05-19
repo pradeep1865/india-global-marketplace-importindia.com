@@ -18,6 +18,7 @@ const staticPages = [
   "compare",
   "about-us",
   "contact-us",
+  "company-policy",
   "privacy-policy",
   "terms-and-conditions",
   "return-policy",

@@ -2,7 +2,7 @@
 
 import { create } from "zustand";
 
-export type AccountRole = "BUYER" | "MANUFACTURER";
+export type AccountRole = "BUYER" | "MANUFACTURER" | "ADMIN";
 
 export type StoredAccount = {
   id: string;
@@ -38,20 +38,39 @@ type AuthState = {
   currentUser: StoredAccount | null;
   hasHydrated: boolean;
   hydrate: () => void;
-  login: (email: string, password: string) => { ok: boolean; message: string };
+  login: (email: string, password: string) => { ok: boolean; message: string; account?: StoredAccount };
   register: (account: Omit<StoredAccount, "id" | "accountStatus" | "verificationStatus" | "provider" | "addresses">) => StoredAccount;
   logout: () => void;
 };
 
 const usersKey = "importindia.users";
 const currentUserKey = "importindia.currentUser";
+const demoAdmin: StoredAccount = {
+  id: "admin-importindia-demo",
+  role: "ADMIN",
+  email: "admin@importindia.com",
+  password: "Admin@12345",
+  fullName: "ImportIndia Super Admin",
+  country: "India",
+  countryCode: "IN",
+  state: "Delhi",
+  city: "New Delhi",
+  addressLine: "ImportIndia Operations Center",
+  location: "New Delhi, Delhi",
+  phoneCountryCode: "+91",
+  phone: "+91 99999 00000",
+  accountStatus: "ACTIVE",
+  provider: "email",
+  addresses: []
+};
 
 function readUsers() {
-  if (typeof window === "undefined") return [];
+  if (typeof window === "undefined") return [demoAdmin];
   try {
-    return (JSON.parse(window.localStorage.getItem(usersKey) || "[]") as StoredAccount[]) ?? [];
+    const users = (JSON.parse(window.localStorage.getItem(usersKey) || "[]") as StoredAccount[]) ?? [];
+    return users.some((user) => user.email.toLowerCase() === demoAdmin.email) ? users : [demoAdmin, ...users];
   } catch {
-    return [];
+    return [demoAdmin];
   }
 }
 
@@ -81,7 +100,7 @@ export const useAuthStore = create<AuthState>((set) => ({
     const sessionAccount = publicAccount(account);
     window.localStorage.setItem(currentUserKey, JSON.stringify(sessionAccount));
     set({ currentUser: sessionAccount });
-    return { ok: true, message: "Logged in successfully." };
+    return { ok: true, message: "Logged in successfully.", account: sessionAccount };
   },
   register: (account) => {
     const users = readUsers();
