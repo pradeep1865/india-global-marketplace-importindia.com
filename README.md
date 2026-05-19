@@ -38,3 +38,17 @@ API runs at `http://localhost:4000`.
 ## Production Notes
 
 This scaffold separates demo-ready UI from production integration boundaries. Before launch, connect OAuth providers, object storage, email/SMS providers, Razorpay webhooks, Meilisearch indexing jobs, and cloud secrets.
+
+## Vercel Deployment
+
+Deploy the frontend from `apps/web`.
+
+Recommended Vercel settings:
+
+- Framework Preset: Next.js
+- Root Directory: `apps/web`
+- Install Command: `cd ../.. && pnpm install --frozen-lockfile`
+- Build Command: `cd ../.. && pnpm --filter @importindia/web build`
+- Output Directory: `.next`
+
+If Vercel logs show Express, Prisma, `csurf`, or `tsx` dependencies, the Root Directory is pointing at `apps/api`. Switch it to `apps/web` for the website deployment.
