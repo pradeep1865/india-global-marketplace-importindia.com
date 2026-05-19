@@ -2,8 +2,8 @@ import type { MetadataRoute } from "next";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "ImportIndia.com",
-    short_name: "ImportIndia",
+    name: "Haylix",
+    short_name: "Haylix",
     description: "Global manufacturer marketplace",
     start_url: "/",
     display: "standalone",

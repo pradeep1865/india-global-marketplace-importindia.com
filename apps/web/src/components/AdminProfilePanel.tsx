@@ -77,7 +77,7 @@ export function AdminProfilePanel() {
             </div>
             <div>
               <p className="text-xs font-black uppercase tracking-[0.18em] text-[#ff9f1c]">Admin profile</p>
-              <h1 className="text-3xl font-black text-[#0b1f4d]">ImportIndia Operations Admin</h1>
+              <h1 className="text-3xl font-black text-[#0b1f4d]">Haylix Operations Admin</h1>
             </div>
           </div>
           <div className="flex flex-wrap gap-2">

@@ -86,7 +86,7 @@ export default function AddListingPage() {
           <p className="text-xs font-black uppercase tracking-[0.18em] text-[#ff9f1c]">Admin approval required</p>
           <h1 className="mt-2 text-3xl font-black text-[#0b1f4d]">Add Your Electronics Listing</h1>
           <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-600">
-            Submit a product for ImportIndia.com moderation. Approved listings become visible after admin review.
+            Submit a product for Haylix moderation. Approved listings become visible after admin review.
           </p>
         </div>
 

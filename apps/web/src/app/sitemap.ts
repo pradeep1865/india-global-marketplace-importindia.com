@@ -35,7 +35,7 @@ const staticPages = [
 
 export default function sitemap(): MetadataRoute.Sitemap {
   return staticPages.map((page) => ({
-    url: `https://importindia.com/${page}`,
+    url: `https://haylix.com/${page}`,
     lastModified: new Date()
   }));
 }

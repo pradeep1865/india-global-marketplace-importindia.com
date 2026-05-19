@@ -46,7 +46,7 @@ export function LoginForm() {
     <form onSubmit={handleSubmit} className="space-y-4 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
       <AuthMark />
       <div className="rounded-2xl bg-blue-50 p-3 text-xs font-bold leading-6 text-[#0b1f4d]">
-        Admin demo login: admin@importindia.com / Admin@12345
+        Admin demo login: admin@haylix.com / Admin@12345
       </div>
       <OAuthButton provider="Google" href={`${apiUrl}/api/v1/auth/oauth/google`} />
       <OAuthButton provider="Facebook" href={`${apiUrl}/api/v1/auth/oauth/facebook`} />
@@ -293,7 +293,7 @@ function AuthMark() {
     <div className="mb-2 flex items-center gap-3 rounded-2xl bg-[#0b1f4d] p-4 text-white">
       <div className="grid h-12 w-12 place-items-center rounded-2xl bg-white text-xl font-black text-[#0b1f4d]">II</div>
       <div>
-        <div className="text-lg font-black">ImportIndia Secure ID</div>
+        <div className="text-lg font-black">Haylix Secure ID</div>
         <div className="text-xs font-bold text-blue-100">One account for sourcing, checkout, and manufacturer tools.</div>
       </div>
     </div>
