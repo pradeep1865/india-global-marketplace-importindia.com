@@ -9,7 +9,7 @@ const nav = [
   { label: "Filters", icon: Filter, href: "#filters" },
   { label: "Sort", icon: SortAsc, href: "#sort" },
   { label: "Categories", icon: Shapes, href: "#categories" },
-  { label: "Verified Manufacturers", icon: CheckCircle2, href: "#verified" },
+  { label: "Verified Manufacturers", icon: CheckCircle2, href: "/verified-manufacturers" },
   { label: "Transportation Cost Calculator", icon: Calculator, href: "/logistics-calculator" }
 ];
 
@@ -30,7 +30,13 @@ export function Sidebar() {
           </Link>
         ))}
         <button
-          onClick={openGuestPrompt}
+          onClick={() => {
+            if (typeof window !== "undefined") {
+              window.location.href = "/add-listing";
+            } else {
+              openGuestPrompt();
+            }
+          }}
           className="focus-ring flex w-full items-center gap-3 rounded-xl bg-[#0b1f4d] px-3 py-3 text-left text-sm font-black text-white"
         >
           <ListPlus size={18} className="text-[#ff9f1c]" />

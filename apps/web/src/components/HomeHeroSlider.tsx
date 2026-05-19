@@ -10,8 +10,8 @@ const slides = [
     eyebrow: "Mumbai to the world",
     title: "Industrial exports moving through India’s busiest trade corridors.",
     copy: "Discover verified machinery, automotive, and electronics manufacturers ready for global shipment.",
-    cta: "Source machinery",
-    href: "/products/prod-cnc-gearbox",
+    cta: "Source EV electronics",
+    href: "/products/prod-ev-bms-kit",
     image:
       "https://images.unsplash.com/photo-1578575437130-527eed3abbec?auto=format&fit=crop&w=1400&q=85",
     city: "Mumbai",
@@ -22,8 +22,8 @@ const slides = [
     eyebrow: "Delhi NCR supply network",
     title: "Wholesale buyers meet certified textile and packaging exporters.",
     copy: "Compare MOQ tiers, request quotes, and build repeatable sourcing programs from one dashboard.",
-    cta: "Browse textiles",
-    href: "/products/prod-organic-bedsheet",
+    cta: "Browse audio parts",
+    href: "/products/prod-bluetooth-receiver",
     image:
       "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=1400&q=85",
     city: "Delhi NCR",

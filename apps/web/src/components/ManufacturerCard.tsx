@@ -2,16 +2,35 @@
 
 import Image from "next/image";
 import type { ReactNode } from "react";
+import { useEffect } from "react";
 import { motion } from "framer-motion";
 import { BadgeCheck, Clock, Heart, MessageSquare, Star, TrendingUp } from "lucide-react";
 import type { Manufacturer } from "@/lib/mock-data";
 import Link from "next/link";
 import { formatMoneyFromInr } from "@/lib/currency";
 import { useMarketplaceStore } from "@/store/marketplace-store";
+import { useAuthStore } from "@/store/auth-store";
 
 export function ManufacturerCard({ manufacturer }: { manufacturer: Manufacturer }) {
-  const { currency, currencyRates } = useMarketplaceStore();
+  const { currency, currencyRates, likedProductIds, hydrateLikes, toggleLike, openGuestPrompt } = useMarketplaceStore();
+  const { currentUser } = useAuthStore();
+  const primaryProduct = manufacturer.products[0];
+  const liked = primaryProduct ? likedProductIds.includes(primaryProduct.id) : false;
   const formattedPrice = `From ${formatMoneyFromInr(manufacturer.priceInr, currency.code, currencyRates)}`;
+
+  useEffect(() => {
+    if (currentUser) hydrateLikes(currentUser.id);
+  }, [currentUser, hydrateLikes]);
+
+  function handleLike() {
+    if (!primaryProduct) return;
+    if (!currentUser) {
+      openGuestPrompt();
+      return;
+    }
+    if (!likedProductIds.length) hydrateLikes(currentUser.id);
+    toggleLike(primaryProduct.id, currentUser.id);
+  }
 
   return (
     <motion.article
@@ -44,7 +63,7 @@ export function ManufacturerCard({ manufacturer }: { manufacturer: Manufacturer 
             ) : null}
           </div>
           <p className="text-sm font-semibold text-slate-600">
-            {manufacturer.category} · {manufacturer.country}
+            {manufacturer.category} / {manufacturer.country}
           </p>
           <div className="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
             <Metric label="MOQ" value={manufacturer.moq} />
@@ -70,8 +89,15 @@ export function ManufacturerCard({ manufacturer }: { manufacturer: Manufacturer 
           <button className="focus-ring rounded-full bg-[#0b1f4d] p-3 text-white" aria-label="Contact manufacturer">
             <MessageSquare size={19} />
           </button>
-          <button className="focus-ring rounded-full border border-slate-200 p-3 text-slate-700" aria-label="Save to wishlist">
-            <Heart size={19} />
+          <button
+            onClick={handleLike}
+            className={`focus-ring rounded-full border p-3 ${
+              liked ? "border-rose-200 bg-rose-50 text-rose-600" : "border-slate-200 text-slate-700"
+            }`}
+            aria-label={liked ? "Remove from wishlist" : "Save to wishlist"}
+            aria-pressed={liked}
+          >
+            <Heart size={19} className={liked ? "fill-rose-500" : ""} />
           </button>
           <button className="focus-ring rounded-full border border-slate-200 p-3 text-slate-700" aria-label="Compare product">
             <TrendingUp size={19} />

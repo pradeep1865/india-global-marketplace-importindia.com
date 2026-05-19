@@ -10,10 +10,13 @@ export default function AdminPage() {
       </div>
       <AdminDashboardCards />
       <section className="mt-6 grid gap-6 lg:grid-cols-3">
-        {["Manufacturer verification", "Product moderation", "Payment monitoring", "Account unlocks", "Search analytics", "Revenue dashboard"].map((title) => (
+        {["Admin profile", "Manufacturer verification", "Product moderation", "Payment monitoring", "Account unlocks", "Search analytics", "Revenue dashboard"].map((title) => (
           <div key={title} className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
             <h2 className="font-black text-[#0b1f4d]">{title}</h2>
             <p className="mt-2 text-sm leading-6 text-slate-600">Queue, audit log, risk signals, and approval actions are exposed through admin REST routes.</p>
+            {title === "Admin profile" ? (
+              <a href="/admin/profile" className="focus-ring mt-4 inline-block rounded-full bg-[#0b1f4d] px-4 py-2 text-xs font-black text-white">Open profile</a>
+            ) : null}
             {title === "Manufacturer verification" ? (
               <a href="/admin/manufacturers" className="focus-ring mt-4 inline-block rounded-full bg-[#0b1f4d] px-4 py-2 text-xs font-black text-white">Open queue</a>
             ) : null}

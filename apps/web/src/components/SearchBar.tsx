@@ -2,13 +2,21 @@
 
 import { Search, SlidersHorizontal, Sparkles } from "lucide-react";
 import { useMemo } from "react";
-import { categories, manufacturers } from "@/lib/mock-data";
+import { categories, electronicsSegments, manufacturers } from "@/lib/mock-data";
 import { useMarketplaceStore } from "@/store/marketplace-store";
 
 export function SearchBar() {
   const { query, setQuery, language } = useMarketplaceStore();
   const suggestions = useMemo(() => {
-    const terms = [...categories, ...manufacturers.flatMap((item) => [item.name, ...item.tags])];
+    const terms = [
+      ...categories,
+      ...electronicsSegments.map((segment) => segment.name),
+      ...manufacturers.flatMap((item) => [
+        item.name,
+        ...item.tags,
+        ...item.products.flatMap((product) => [product.shortName, product.segment, ...product.tags, ...product.connectivity])
+      ])
+    ];
     return terms.filter((term) => term.toLowerCase().includes(query.toLowerCase())).slice(0, 5);
   }, [query]);
 
