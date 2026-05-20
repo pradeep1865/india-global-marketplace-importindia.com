@@ -36,6 +36,16 @@ All endpoints are prefixed with `/api/v1`.
 - `GET /catalog/manufacturers/:id`
 - `POST /catalog/products/:id/reviews`
 
+## External Supplier Imports
+
+Use these endpoints for electronics supplier datasets you are permitted to reuse, such as platform exports, approved API feeds, partner feeds, or manually verified research. Do not use them for unauthorized bulk scraping.
+
+- `GET /external-suppliers?q=&segment=&take=`
+- `POST /external-suppliers/imports`
+  - Roles: `ADMIN`, `SUPER_ADMIN`
+  - Creates an import batch and nested external suppliers, products, and certifications.
+  - Captures source platform, source type, source URLs, original and English company names, legal name, business license, registered address, contact details, years active, employee count, factory size, annual revenue, main products, electronics segments, OEM/ODM/sample support, MOQ, price range, lead time, trade/payment terms, shipping ports, ratings, badges, certifications, raw source snapshot, and moderation status.
+
 ## Search
 
 - `GET /search?q=&country=&category=&minMoq=&verified=&cursor=`

@@ -57,6 +57,21 @@ enum MediaType {
   VIDEO
 }
 
+enum ExternalSource {
+  PLATFORM_EXPORT
+  APPROVED_API
+  MANUAL_RESEARCH
+  PARTNER_FEED
+}
+
+enum ExternalSupplierStatus {
+  IMPORTED
+  REVIEW_REQUIRED
+  APPROVED
+  REJECTED
+  ARCHIVED
+}
+
 model User {
   id               String          @id @default(cuid())
   role             UserRole
@@ -107,6 +122,7 @@ model Manufacturer {
   products            Product[]
   pickupAddresses     PickupAddress[]
   reviews             ManufacturerReview[]
+  externalSupplier    ExternalSupplier?
 
   @@map("manufacturers")
 }
@@ -325,4 +341,130 @@ model ManufacturerReview {
   user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("manufacturer_reviews")
+}
+
+model ExternalImportBatch {
+  id              String             @id @default(cuid())
+  sourcePlatform  String             @map("source_platform")
+  sourceType      ExternalSource     @default(PLATFORM_EXPORT) @map("source_type")
+  sourceUrl       String?            @map("source_url")
+  segment         String             @default("electronics")
+  submittedBy     String?            @map("submitted_by")
+  recordCount     Int                @default(0) @map("record_count")
+  importedCount   Int                @default(0) @map("imported_count")
+  rejectedCount   Int                @default(0) @map("rejected_count")
+  notes           String?
+  createdAt       DateTime           @default(now()) @map("created_at")
+  suppliers       ExternalSupplier[]
+
+  @@map("external_import_batches")
+}
+
+model ExternalSupplier {
+  id                    String                  @id @default(cuid())
+  importBatchId          String?                 @map("import_batch_id")
+  sourcePlatform         String                  @map("source_platform")
+  sourceType             ExternalSource          @default(PLATFORM_EXPORT) @map("source_type")
+  sourceSupplierId       String?                 @map("source_supplier_id")
+  sourceStoreUrl         String?                 @map("source_store_url")
+  sourceProfileUrl       String?                 @map("source_profile_url")
+  sourceSearchKeyword    String?                 @map("source_search_keyword")
+  originalLanguage       String?                 @map("original_language")
+  companyNameOriginal    String                  @map("company_name_original")
+  companyNameEnglish     String?                 @map("company_name_english")
+  legalName              String?                 @map("legal_name")
+  businessLicenseNumber  String?                 @map("business_license_number")
+  registrationAddress    String?                 @map("registration_address")
+  city                   String?
+  province               String?
+  country                String                  @default("China")
+  phone                  String?
+  email                  String?
+  website                String?
+  contactPerson          String?                 @map("contact_person")
+  contactRole            String?                 @map("contact_role")
+  yearsActive            Int?                    @map("years_active")
+  employeeCount          String?                 @map("employee_count")
+  factorySize            String?                 @map("factory_size")
+  annualRevenue          String?                 @map("annual_revenue")
+  mainProducts           String[]                @map("main_products")
+  electronicsSegments    String[]                @map("electronics_segments")
+  capabilities           String[]
+  exportMarkets          String[]                @map("export_markets")
+  moqSummary             String?                 @map("moq_summary")
+  minMoq                 Int?                    @map("min_moq")
+  priceRange             String?                 @map("price_range")
+  currency               String?                 @default("CNY")
+  leadTimeDays           Int?                    @map("lead_time_days")
+  sampleAvailable        Boolean?                @map("sample_available")
+  oemAvailable           Boolean?                @map("oem_available")
+  odmAvailable           Boolean?                @map("odm_available")
+  tradeTerms             String[]                @map("trade_terms")
+  paymentTerms           String[]                @map("payment_terms")
+  shippingPorts          String[]                @map("shipping_ports")
+  rating                 Decimal?                @db.Decimal(4, 2)
+  reviewCount            Int?                    @map("review_count")
+  transactionLevel       String?                 @map("transaction_level")
+  responseRate           String?                 @map("response_rate")
+  responseTime           String?                 @map("response_time")
+  badges                 String[]
+  rawSnapshot            Json?                   @map("raw_snapshot")
+  status                 ExternalSupplierStatus  @default(REVIEW_REQUIRED)
+  linkedManufacturerId   String?                 @unique @map("linked_manufacturer_id")
+  lastSyncedAt           DateTime?               @map("last_synced_at")
+  createdAt              DateTime                @default(now()) @map("created_at")
+  updatedAt              DateTime                @updatedAt @map("updated_at")
+  importBatch            ExternalImportBatch?    @relation(fields: [importBatchId], references: [id], onDelete: SetNull)
+  linkedManufacturer     Manufacturer?           @relation(fields: [linkedManufacturerId], references: [userId], onDelete: SetNull)
+  products               ExternalSupplierProduct[]
+  certifications         ExternalSupplierCertification[]
+
+  @@index([sourcePlatform, sourceSupplierId])
+  @@index([companyNameOriginal])
+  @@index([status])
+  @@map("external_suppliers")
+}
+
+model ExternalSupplierProduct {
+  id                 String           @id @default(cuid())
+  externalSupplierId String           @map("external_supplier_id")
+  sourceProductId    String?          @map("source_product_id")
+  sourceUrl          String?          @map("source_url")
+  titleOriginal      String           @map("title_original")
+  titleEnglish       String?          @map("title_english")
+  description        String?
+  category           String?
+  segment            String?
+  brand              String?
+  modelNumber        String?          @map("model_number")
+  minMoq             Int?             @map("min_moq")
+  priceMin           Decimal?         @db.Decimal(12, 2) @map("price_min")
+  priceMax           Decimal?         @db.Decimal(12, 2) @map("price_max")
+  currency           String?          @default("CNY")
+  stock              Int?
+  leadTimeDays       Int?             @map("lead_time_days")
+  imageUrls          String[]         @map("image_urls")
+  tags               String[]
+  attributes         Json?
+  rawSnapshot        Json?            @map("raw_snapshot")
+  createdAt          DateTime         @default(now()) @map("created_at")
+  supplier           ExternalSupplier @relation(fields: [externalSupplierId], references: [id], onDelete: Cascade)
+
+  @@index([externalSupplierId])
+  @@index([segment])
+  @@map("external_supplier_products")
+}
+
+model ExternalSupplierCertification {
+  id                 String           @id @default(cuid())
+  externalSupplierId String           @map("external_supplier_id")
+  name               String
+  issuer             String?
+  certificateNumber  String?          @map("certificate_number")
+  validUntil         DateTime?        @map("valid_until")
+  documentUrl        String?          @map("document_url")
+  supplier           ExternalSupplier @relation(fields: [externalSupplierId], references: [id], onDelete: Cascade)
+
+  @@index([externalSupplierId])
+  @@map("external_supplier_certifications")
 }

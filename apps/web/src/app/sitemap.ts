@@ -13,6 +13,7 @@ const staticPages = [
   "admin/moderation",
   "manufacturer/upload",
   "manufacturer/dashboard",
+  "external-suppliers",
   "logistics-calculator",
   "wishlist",
   "compare",

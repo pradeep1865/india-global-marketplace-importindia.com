@@ -4,6 +4,7 @@ import { authRouter } from "./modules/auth/auth.routes.js";
 import { catalogRouter } from "./modules/catalog/catalog.routes.js";
 import { cloudRouter } from "./modules/cloud/cloud.routes.js";
 import { commerceRouter } from "./modules/commerce/commerce.routes.js";
+import { externalSuppliersRouter } from "./modules/external-suppliers/external-suppliers.routes.js";
 import { paymentsRouter } from "./modules/payments/payments.routes.js";
 import { searchRouter } from "./modules/search/search.routes.js";
 import { applySecurity } from "./middleware/security.js";
@@ -16,6 +17,7 @@ export function createApp() {
   app.get("/health", (_req, res) => res.json({ status: "ok", service: "importindia-api" }));
   app.use("/api/v1/auth", authRouter);
   app.use("/api/v1/catalog", catalogRouter);
+  app.use("/api/v1/external-suppliers", externalSuppliersRouter);
   app.use("/api/v1/cloud", cloudRouter);
   app.use("/api/v1/search", searchRouter);
   app.use("/api/v1", commerceRouter);

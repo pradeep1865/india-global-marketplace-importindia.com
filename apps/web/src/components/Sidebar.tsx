@@ -1,6 +1,6 @@
 "use client";
 
-import { Calculator, CheckCircle2, FileText, Filter, Home, ListPlus, Mail, RotateCcw, Shapes } from "lucide-react";
+import { Calculator, CheckCircle2, Database, FileText, Filter, Home, ListPlus, Mail, RotateCcw, Shapes } from "lucide-react";
 import Link from "next/link";
 import { useMarketplaceStore } from "@/store/marketplace-store";
 
@@ -8,6 +8,7 @@ const nav = [
   { label: "Home", icon: Home, href: "/" },
   { label: "Filters", icon: Filter, href: "#filters" },
   { label: "Categories", icon: Shapes, href: "#categories" },
+  { label: "1688 Electronics Suppliers", icon: Database, href: "/external-suppliers" },
   { label: "Verified Manufacturers", icon: CheckCircle2, href: "/verified-manufacturers" },
   { label: "Transportation Cost Calculator", icon: Calculator, href: "/logistics-calculator" }
 ];
