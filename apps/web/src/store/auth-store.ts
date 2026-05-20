@@ -39,6 +39,7 @@ type AuthState = {
   hasHydrated: boolean;
   hydrate: () => void;
   login: (email: string, password: string) => { ok: boolean; message: string; account?: StoredAccount };
+  loginWithProvider: (provider: "google" | "facebook") => StoredAccount;
   register: (account: Omit<StoredAccount, "id" | "accountStatus" | "verificationStatus" | "provider" | "addresses">) => StoredAccount;
   logout: () => void;
 };
@@ -48,14 +49,14 @@ const currentUserKey = "importindia.currentUser";
 const demoAdmin: StoredAccount = {
   id: "admin-importindia-demo",
   role: "ADMIN",
-  email: "admin@haylix.com",
+  email: "admin@emitrix.com",
   password: "Admin@12345",
-  fullName: "Haylix Super Admin",
+  fullName: "Emitrix Super Admin",
   country: "India",
   countryCode: "IN",
   state: "Delhi",
   city: "New Delhi",
-  addressLine: "Haylix Operations Center",
+  addressLine: "Emitrix Operations Center",
   location: "New Delhi, Delhi",
   phoneCountryCode: "+91",
   phone: "+91 99999 00000",
@@ -68,7 +69,7 @@ function readUsers() {
   if (typeof window === "undefined") return [demoAdmin];
   try {
     const users = (JSON.parse(window.localStorage.getItem(usersKey) || "[]") as StoredAccount[]) ?? [];
-    return users.some((user) => user.email.toLowerCase() === demoAdmin.email) ? users : [demoAdmin, ...users];
+    return users.some((user) => user.email.toLowerCase() === demoAdmin.email.toLowerCase()) ? users : [demoAdmin, ...users];
   } catch {
     return [demoAdmin];
   }
@@ -101,6 +102,42 @@ export const useAuthStore = create<AuthState>((set) => ({
     window.localStorage.setItem(currentUserKey, JSON.stringify(sessionAccount));
     set({ currentUser: sessionAccount });
     return { ok: true, message: "Logged in successfully.", account: sessionAccount };
+  },
+  loginWithProvider: (provider) => {
+    const users = readUsers();
+    const saved: StoredAccount = {
+      id: `${provider}-emitrix-demo-buyer`,
+      role: "BUYER",
+      email: `${provider}.buyer@emitrix.demo`,
+      password: "",
+      fullName: provider === "google" ? "Google Buyer" : "Facebook Buyer",
+      country: "India",
+      countryCode: "IN",
+      state: "Delhi",
+      city: "New Delhi",
+      addressLine: "OAuth demo address",
+      location: "New Delhi, Delhi",
+      phoneCountryCode: "+91",
+      phone: "+91 90000 00000",
+      accountStatus: "ACTIVE",
+      provider,
+      addresses: [
+        {
+          id: `${provider}-emitrix-demo-address`,
+          addressLine: "OAuth demo address",
+          city: "New Delhi",
+          state: "Delhi",
+          country: "India",
+          zipCode: ""
+        }
+      ]
+    };
+    const nextUsers = users.filter((user) => user.email.toLowerCase() !== saved.email.toLowerCase()).concat(saved);
+    writeUsers(nextUsers);
+    const sessionAccount = publicAccount(saved);
+    window.localStorage.setItem(currentUserKey, JSON.stringify(sessionAccount));
+    set({ currentUser: sessionAccount });
+    return sessionAccount;
   },
   register: (account) => {
     const users = readUsers();

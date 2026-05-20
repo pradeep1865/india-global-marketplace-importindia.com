@@ -7,32 +7,33 @@ import { ElectronicsMegaPanel } from "@/components/ElectronicsMegaPanel";
 import { HomeHeroSlider } from "@/components/HomeHeroSlider";
 import { ManufacturerCard } from "@/components/ManufacturerCard";
 import { electronicsCategoryGroups, electronicsSegments, manufacturers, type Manufacturer } from "@/lib/mock-data";
-import { useMarketplaceStore, type MarketplaceFilters, type MarketplaceSort } from "@/store/marketplace-store";
+import { useMarketplaceStore, type MarketplaceFilters, type MarketplaceSort, type SearchMode } from "@/store/marketplace-store";
 
 const segmentParent = new Map(electronicsSegments.map((segment) => [segment.name, segment.parent]));
 
-function matchesQuery(manufacturer: Manufacturer, query: string) {
+function matchesQuery(manufacturer: Manufacturer, query: string, searchMode: SearchMode) {
   if (!query.trim()) return true;
   const normalized = query.toLowerCase().trim();
-  const terms = [
-    manufacturer.name,
-    manufacturer.country,
-    manufacturer.category,
-    manufacturer.moq,
-    ...manufacturer.tags,
-    ...manufacturer.products.flatMap((product) => [
-      product.shortName,
-      product.description,
-      product.category,
-      product.segment,
-      String(product.moq),
-      ...product.tags,
-      ...product.connectivity,
-      ...product.useCase,
-      ...product.certification
-    ])
-  ];
-  return terms.some((term) => term.toLowerCase().includes(normalized));
+  const productTerms = manufacturer.products.flatMap((product) => [
+    product.shortName,
+    product.description,
+    product.category,
+    product.segment,
+    String(product.moq),
+    ...product.tags,
+    ...product.connectivity,
+    ...product.useCase,
+    ...product.certification
+  ]);
+  const termsByMode: Record<SearchMode, Array<string | number>> = {
+    all: [manufacturer.name, manufacturer.country, manufacturer.category, manufacturer.moq, ...manufacturer.tags, ...productTerms],
+    company: [manufacturer.name, manufacturer.country, manufacturer.category, ...manufacturer.tags],
+    devices: manufacturer.products.flatMap((product) => [product.shortName, product.category, product.segment, ...product.tags]),
+    details: manufacturer.products.flatMap((product) => [product.description, product.shippingWeight, ...product.connectivity, ...product.useCase, ...product.certification]),
+    moq: [manufacturer.moq, ...manufacturer.products.map((product) => String(product.moq))]
+  };
+  const terms = termsByMode[searchMode];
+  return terms.some((term) => String(term).toLowerCase().includes(normalized));
 }
 
 function deliveryDays(manufacturer: Manufacturer) {
@@ -56,9 +57,11 @@ function filterManufacturers({
   selectedCategoryGroup,
   selectedSegment,
   filters,
-  sortBy
+  sortBy,
+  searchMode
 }: {
   query: string;
+  searchMode: SearchMode;
   selectedCategoryGroup: string;
   selectedSegment: string;
   filters: MarketplaceFilters;
@@ -82,7 +85,7 @@ function filterManufacturers({
 
     return (
       hasMatchingProduct &&
-      matchesQuery(manufacturer, query) &&
+      matchesQuery(manufacturer, query, searchMode) &&
       (!filters.verifiedOnly || manufacturer.verified) &&
       manufacturer.rating >= filters.minRating
     );
@@ -104,6 +107,7 @@ export function MarketplaceHome() {
   const [categoryPanelOpen, setCategoryPanelOpen] = useState(false);
   const {
     query,
+    searchMode,
     selectedCategoryGroup,
     selectedSegment,
     sortBy,
@@ -114,8 +118,8 @@ export function MarketplaceHome() {
   } = useMarketplaceStore();
 
   const filteredManufacturers = useMemo(
-    () => filterManufacturers({ query, selectedCategoryGroup, selectedSegment, filters, sortBy }),
-    [query, selectedCategoryGroup, selectedSegment, filters, sortBy]
+    () => filterManufacturers({ query, searchMode, selectedCategoryGroup, selectedSegment, filters, sortBy }),
+    [query, searchMode, selectedCategoryGroup, selectedSegment, filters, sortBy]
   );
 
   return (

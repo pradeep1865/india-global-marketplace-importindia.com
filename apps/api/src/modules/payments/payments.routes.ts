@@ -18,5 +18,5 @@ paymentsRouter.post("/razorpay/webhook", (req, res) => {
   return res.json({ received: true });
 });
 
-paymentsRouter.post("/upi/intent", (_req, res) => res.json({ intent: "upi://pay?pa=merchant@upi&pn=ImportIndia" }));
+paymentsRouter.post("/upi/intent", (_req, res) => res.json({ intent: "upi://pay?pa=merchant@upi&pn=Emitrix" }));
 paymentsRouter.post("/stripe/create-intent", (_req, res) => res.json({ provider: "stripe", clientSecret: "stripe_client_secret_boundary" }));

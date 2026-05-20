@@ -203,6 +203,9 @@ authRouter.post("/verify-email", (_req, res) => res.json({ message: "Email verif
 authRouter.post("/otp/request", (_req, res) => res.json({ message: "OTP request queued" }));
 authRouter.post("/otp/verify", (_req, res) => res.json({ message: "OTP verification boundary" }));
 authRouter.get("/oauth/google", (_req, res) => {
+  if (!process.env.GOOGLE_CLIENT_ID) {
+    return res.redirect(`${env.WEB_URL}/login?oauth=google&status=demo-provider-login`);
+  }
   const params = new URLSearchParams({
     client_id: process.env.GOOGLE_CLIENT_ID ?? "",
     redirect_uri: `${env.API_URL ?? "http://localhost:4000"}/api/v1/auth/oauth/google/callback`,
@@ -219,6 +222,9 @@ authRouter.get("/oauth/google/callback", (_req, res) => {
 });
 
 authRouter.get("/oauth/facebook", (_req, res) => {
+  if (!process.env.FACEBOOK_CLIENT_ID) {
+    return res.redirect(`${env.WEB_URL}/login?oauth=facebook&status=demo-provider-login`);
+  }
   const params = new URLSearchParams({
     client_id: process.env.FACEBOOK_CLIENT_ID ?? "",
     redirect_uri: `${env.API_URL ?? "http://localhost:4000"}/api/v1/auth/oauth/facebook/callback`,

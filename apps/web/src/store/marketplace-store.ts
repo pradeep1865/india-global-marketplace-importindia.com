@@ -24,9 +24,11 @@ export type MarketplaceFilters = {
 };
 
 export type MarketplaceSort = "best-match" | "fastest-delivery" | "highest-rated" | "lowest-moq" | "lowest-price";
+export type SearchMode = "all" | "company" | "devices" | "details" | "moq";
 
 type MarketplaceState = {
   query: string;
+  searchMode: SearchMode;
   location: GeoLocationState;
   language: LanguageProfile;
   currency: CurrencyProfile;
@@ -41,6 +43,7 @@ type MarketplaceState = {
   filters: MarketplaceFilters;
   likedProductIds: string[];
   setQuery: (query: string) => void;
+  setSearchMode: (searchMode: SearchMode) => void;
   setLocation: (location: Partial<GeoLocationState>) => void;
   setLanguage: (languageCode: string) => void;
   setCurrency: (currencyCode: string) => void;
@@ -91,6 +94,7 @@ function readLikes(userId?: string) {
 
 export const useMarketplaceStore = create<MarketplaceState>((set) => ({
   query: "",
+  searchMode: "all",
   location: defaultLocation,
   language: defaultLanguageProfile,
   currency: defaultCurrencyProfile,
@@ -105,6 +109,7 @@ export const useMarketplaceStore = create<MarketplaceState>((set) => ({
   filters: defaultFilters,
   likedProductIds: [],
   setQuery: (query) => set({ query }),
+  setSearchMode: (searchMode) => set({ searchMode }),
   setLocation: (location) =>
     set((state) => ({
       location: { ...state.location, ...location }

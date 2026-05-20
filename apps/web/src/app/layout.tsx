@@ -2,19 +2,19 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://haylix.com"),
+  metadataBase: new URL("https://emitrix.com"),
   title: {
-    default: "Haylix | Global Manufacturer Marketplace",
-    template: "%s | Haylix"
+    default: "Emitrix | Global Manufacturer Marketplace",
+    template: "%s | Emitrix"
   },
   description:
-    "Discover verified manufacturers, compare products, request quotes, and source globally from Haylix.",
+    "Discover verified manufacturers, compare products, request quotes, and source globally from Emitrix.",
   keywords: ["manufacturers", "India export", "B2B marketplace", "global sourcing"],
   openGraph: {
-    title: "Haylix",
+    title: "Emitrix",
     description: "Premium B2B/B2C global manufacturer marketplace.",
-    url: "https://haylix.com",
-    siteName: "Haylix",
+    url: "https://emitrix.com",
+    siteName: "Emitrix",
     type: "website"
   }
 };

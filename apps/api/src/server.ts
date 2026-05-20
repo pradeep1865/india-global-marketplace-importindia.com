@@ -8,5 +8,5 @@ const server = http.createServer(app);
 attachRealtime(server);
 
 server.listen(env.PORT, () => {
-  console.log(`ImportIndia API listening on http://localhost:${env.PORT}`);
+  console.log(`Emitrix API listening on http://localhost:${env.PORT}`);
 });

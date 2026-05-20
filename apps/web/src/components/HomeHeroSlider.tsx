@@ -67,7 +67,7 @@ export function HomeHeroSlider() {
               <Globe2 size={15} />
               Guest browsing enabled
             </div>
-            <h1 className="mt-5 max-w-3xl text-4xl font-black leading-tight md:text-6xl">Haylix</h1>
+            <h1 className="mt-5 max-w-3xl text-4xl font-black leading-tight md:text-6xl">Emitrix</h1>
             <p className="mt-4 max-w-2xl text-base leading-7 text-blue-100">
               Search verified manufacturers, compare MOQ pricing, calculate logistics, and move goods from Indian production hubs to global buyers.
             </p>

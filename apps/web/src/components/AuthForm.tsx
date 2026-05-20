@@ -8,11 +8,36 @@ import { useMarketplaceStore } from "@/store/marketplace-store";
 import type { CountryRow } from "@/lib/location-table";
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
+const googleClientConfigured = Boolean(process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID);
+const facebookClientConfigured = Boolean(process.env.NEXT_PUBLIC_FACEBOOK_APP_ID);
 
 export function LoginForm() {
   const router = useRouter();
   const login = useAuthStore((state) => state.login);
+  const loginWithProvider = useAuthStore((state) => state.loginWithProvider);
   const [message, setMessage] = useState("");
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const oauthProvider = params.get("oauth");
+    const oauthStatus = params.get("status");
+    if ((oauthProvider === "google" || oauthProvider === "facebook") && oauthStatus === "demo-provider-login") {
+      loginWithProvider(oauthProvider);
+      router.replace("/account");
+    }
+  }, [loginWithProvider, router]);
+
+  function handleOAuth(provider: "google" | "facebook") {
+    const providerConfigured = provider === "google" ? googleClientConfigured : facebookClientConfigured;
+    if (providerConfigured) {
+      window.location.href = `${apiUrl}/api/v1/auth/oauth/${provider}`;
+      return;
+    }
+
+    loginWithProvider(provider);
+    setMessage(`${provider === "google" ? "Google" : "Facebook"} demo sign-in completed. Add provider client IDs to enable live OAuth.`);
+    router.push("/account");
+  }
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -46,10 +71,10 @@ export function LoginForm() {
     <form onSubmit={handleSubmit} className="space-y-4 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
       <AuthMark />
       <div className="rounded-2xl bg-blue-50 p-3 text-xs font-bold leading-6 text-[#0b1f4d]">
-        Admin demo login: admin@haylix.com / Admin@12345
+        Admin demo login: admin@emitrix.com / Admin@12345
       </div>
-      <OAuthButton provider="Google" href={`${apiUrl}/api/v1/auth/oauth/google`} />
-      <OAuthButton provider="Facebook" href={`${apiUrl}/api/v1/auth/oauth/facebook`} />
+      <OAuthButton provider="Google" onClick={() => handleOAuth("google")} />
+      <OAuthButton provider="Facebook" onClick={() => handleOAuth("facebook")} />
       <label className="block text-sm font-bold text-slate-700">
         Email
         <div className="mt-2 flex items-center gap-2 rounded-xl border border-slate-200 px-4">
@@ -291,25 +316,25 @@ export function RegisterForm() {
 function AuthMark() {
   return (
     <div className="mb-2 flex items-center gap-3 rounded-2xl bg-[#0b1f4d] p-4 text-white">
-      <div className="grid h-12 w-12 place-items-center rounded-2xl bg-white text-xl font-black text-[#0b1f4d]">II</div>
+      <div className="grid h-12 w-12 place-items-center rounded-2xl bg-white text-xl font-black text-[#0b1f4d]">E</div>
       <div>
-        <div className="text-lg font-black">Haylix Secure ID</div>
+        <div className="text-lg font-black">Emitrix Secure ID</div>
         <div className="text-xs font-bold text-blue-100">One account for sourcing, checkout, and manufacturer tools.</div>
       </div>
     </div>
   );
 }
 
-function OAuthButton({ provider, href }: { provider: "Google" | "Facebook"; href: string }) {
+function OAuthButton({ provider, onClick }: { provider: "Google" | "Facebook"; onClick: () => void }) {
   const isGoogle = provider === "Google";
 
   return (
-    <a href={href} className="focus-ring flex w-full items-center justify-center gap-3 rounded-full border border-slate-200 px-4 py-3 text-sm font-black text-slate-700 hover:bg-slate-50">
+    <button type="button" onClick={onClick} className="focus-ring flex w-full items-center justify-center gap-3 rounded-full border border-slate-200 px-4 py-3 text-sm font-black text-slate-700 hover:bg-slate-50">
       <span className={`grid h-7 w-7 place-items-center rounded-full text-sm font-black text-white ${isGoogle ? "bg-red-500" : "bg-blue-600"}`}>
         {isGoogle ? "G" : "f"}
       </span>
       Continue with {provider}
-    </a>
+    </button>
   );
 }
 

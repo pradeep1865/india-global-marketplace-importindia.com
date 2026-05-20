@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { Bell, MapPin, ShoppingCart, UserRound } from "lucide-react";
 import { SearchBar } from "@/components/SearchBar";
+import { EmitrixLogo } from "@/components/EmitrixLogo";
 import { LocationHydrator } from "@/components/LocationHydrator";
 import { LanguagePicker } from "@/components/LanguagePicker";
 import { CurrencyHydrator } from "@/components/CurrencyHydrator";
@@ -24,8 +25,7 @@ export function Header() {
       <AuthHydrator />
       <div className="mx-auto flex max-w-7xl items-center gap-4 px-4 py-3">
         <Link href="/" className="focus-ring flex shrink-0 items-center gap-2 rounded-lg">
-          <span className="grid h-10 w-10 place-items-center rounded-xl bg-[#0b1f4d] text-lg font-black text-[#ff9f1c]">II</span>
-          <span className="hidden text-lg font-black text-[#0b1f4d] sm:block">Haylix</span>
+          <EmitrixLogo />
         </Link>
         <SearchBar />
         <div className="hidden items-center gap-2 text-xs font-semibold text-slate-600 lg:flex">
